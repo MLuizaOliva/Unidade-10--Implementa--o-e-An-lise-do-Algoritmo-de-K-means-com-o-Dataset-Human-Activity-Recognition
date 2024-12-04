@@ -12,13 +12,18 @@ from pathlib import Path
 # A constante é padronizada em Path para maximizar compatibilidade.
 PASTA_BASE = Path("UCI HAR Dataset")
 ARQUIVO_DADOS = PASTA_BASE / "train" / "X_train.txt"
+ARQUIVO_ATIVIDADES = PASTA_BASE / "train" / "y_train.txt"
 ARQUIVO_FEATURES = PASTA_BASE / "features.txt"
 
 def carregar_dados():
     features = pd.read_csv(ARQUIVO_FEATURES, sep=' ', header=None, names=['id', 'nome'])
     dados = pd.read_csv(ARQUIVO_DADOS, sep='\s+', header=None)
     dados.columns = features['nome']
-    return dados
+    
+    # Carregar as atividades das atividades
+    atividades = pd.read_csv(ARQUIVO_ATIVIDADES, sep='\s+', header=None, names=['atividade'])
+    
+    return dados, atividades
 
 def analise_exploratoria(dados):
     # Estatísticas descritivas são armazenadas aqui.
@@ -71,43 +76,70 @@ def metodo_cotovelo(dados_normalizados, range_k=range(1, 11)):
     
     return inercias, silhouette_scores
 
-def realizar_clustering(dados_pca, n_clusters):
+def realizar_clustering(dados_pca, n_clusters, atividades):
     kmeans = KMeans(n_clusters=n_clusters, init='k-means++', random_state=42)
     clusters = kmeans.fit_predict(dados_pca)
     
-    # Visualização 2D dos clusters
-    plt.figure(figsize=(10, 8))
-    scatter = plt.scatter(dados_pca[:, 0], 
+    # Visualização 2D - Clusters
+    plt.figure(figsize=(15, 5))
+    plt.subplot(121)
+    scatter1 = plt.scatter(dados_pca[:, 0], 
                           dados_pca[:, 1], 
                           c=clusters, 
                           cmap='viridis')
-    plt.colorbar(scatter)
+    plt.colorbar(scatter1)
     plt.xlabel('Componente 1 (X)')
     plt.ylabel('Componente 2 (Y)')
     plt.title(f'Clusters K-means em 2D (K={n_clusters})')
+    
+    # Visualização 2D - Atividades reais
+    plt.subplot(122)
+    scatter2 = plt.scatter(dados_pca[:, 0], 
+                          dados_pca[:, 1], 
+                          c=atividades['atividade'], 
+                          cmap='Set1')
+    plt.colorbar(scatter2)
+    plt.xlabel('Componente 1 (X)')
+    plt.ylabel('Componente 2 (Y)')
+    plt.title('Atividades Reais em 2D')
+    plt.tight_layout()
     plt.show()
     
-    # Visualização 3D dos clusters
-    fig = plt.figure(figsize=(10, 8))
-    ax = fig.add_subplot(111, projection='3d')
+    # Visualizações 3D
+    fig = plt.figure(figsize=(15, 5))
     
-    scatter = ax.scatter(dados_pca[:, 0], 
-                         dados_pca[:, 1], 
-                         dados_pca[:, 2],
-                         c=clusters,
-                         cmap='viridis')
+    # 3D Clusters
+    ax1 = fig.add_subplot(121, projection='3d')
+    scatter3 = ax1.scatter(dados_pca[:, 0], 
+                          dados_pca[:, 1], 
+                          dados_pca[:, 2],
+                          c=clusters,
+                          cmap='viridis')
+    plt.colorbar(scatter3)
+    ax1.set_xlabel('Componente 1 (X)')
+    ax1.set_ylabel('Componente 2 (Y)')
+    ax1.set_zlabel('Componente 3 (Z)')
+    ax1.set_title(f'Clusters K-means 3D (K={n_clusters})')
     
-    plt.colorbar(scatter)
-    ax.set_xlabel('Componente 1 (X)')
-    ax.set_ylabel('Componente 2 (Y)')
-    ax.set_zlabel('Componente 3 (Z)')
-    plt.title(f'Clusters K-means 3D (K={n_clusters})')
+    # 3D Atividades
+    ax2 = fig.add_subplot(122, projection='3d')
+    scatter4 = ax2.scatter(dados_pca[:, 0], 
+                          dados_pca[:, 1], 
+                          dados_pca[:, 2],
+                          c=atividades['atividade'],
+                          cmap='Set1')
+    plt.colorbar(scatter4)
+    ax2.set_xlabel('Componente 1 (X)')
+    ax2.set_ylabel('Componente 2 (Y)')
+    ax2.set_zlabel('Componente 3 (Z)')
+    ax2.set_title('Atividades Reais 3D')
+    plt.tight_layout()
     plt.show()
     
     return clusters, kmeans
 
 def main():
-    dados = carregar_dados()
+    dados, atividades = carregar_dados()
     
     estatisticas = analise_exploratoria(dados)
     
@@ -123,9 +155,12 @@ def main():
     inercias, silhouette_scores = metodo_cotovelo(dados_normalizados)
     
     # Realizar clustering com K=5 (exemplo)
-    clusters, modelo_kmeans = realizar_clustering(dados_pca, n_clusters=5)
+    clusters, modelo_kmeans = realizar_clustering(dados_pca, n_clusters=5, atividades=atividades)    
+    # Associar clusters com atividades
+    atividades['cluster'] = clusters
+    print(atividades.groupby(['atividade', 'cluster']).size().unstack(fill_value=0))
     
-    return dados, dados_pca, clusters, modelo_kmeans
+    return dados, dados_pca, clusters, modelo_kmeans, atividades
 
 if __name__ == "__main__":
-    dados, dados_pca, clusters, modelo_kmeans = main()
+    dados, dados_pca, clusters, modelo_kmeans, atividades = main()
