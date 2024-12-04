@@ -87,9 +87,9 @@ def realizar_clustering(dados_pca, n_clusters):
                         cmap='viridis')
     
     plt.colorbar(scatter)
-    ax.set_xlabel('Primeira Componente')
-    ax.set_ylabel('Segunda Componente')
-    ax.set_zlabel('Terceira Componente')
+    ax.set_xlabel('Componente 1 (X)')
+    ax.set_ylabel('Componente 2 (Y)')
+    ax.set_zlabel('Componente 3 (Z)')
     plt.title(f'Clusters K-means (K={n_clusters})')
     plt.show()
     
