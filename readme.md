@@ -1,4 +1,4 @@
-# Reconhecimento de Atividades Humanas com K-means
+# Unidade 10 - Implementacao e Analise do Algoritmo de K means com o Dataset Human Activity Recognition
 
 ## Objetivo
 Este projeto implementa um sistema de reconhecimento de atividades humanas utilizando dados de sensores de smartphones através do algoritmo K-means. O sistema analisa dados de acelerômetro e giroscópio para identificar e agrupar seis diferentes atividades físicas: caminhada, subida de escadas, descida de escadas, sentar, ficar em pé e deitar.
@@ -14,8 +14,8 @@ Este projeto implementa um sistema de reconhecimento de atividades humanas utili
 ## Instalação
 1. Clone este repositório
 ```bash
-git clone https://github.com/seu-usuario/reconhecimento-atividades-kmeans.git
-cd reconhecimento-atividades-kmeans
+git clone https://github.com/MLuizaOliva/Unidade_10__Implementacao_e_Analise_do_Algoritmo_de_K_means_com_o_Dataset_Human_Activity_Recognition.git
+cd Unidade_10__Implementacao_e_Analise_do_Algoritmo_de_K_means_com_o_Dataset_Human_Activity_Recognition
 ```
 
 
@@ -33,7 +33,7 @@ pip install pandas numpy matplotlib seaborn scikit-learn
 ## Estrutura do Projeto
 
 ```
-reconhecimento-atividades-kmeans/
+Unidade_10__Implementacao_e_Analise_do_Algoritmo_de_K_means_com_o_Dataset_Human_Activity_Recognition/
 │
 ├── main.py                    
 ├── docs/
@@ -52,59 +52,6 @@ reconhecimento-atividades-kmeans/
 python main.py
 ```
 
-
-### Principais Resultados
-
-Let me create a README.md file with the requested sections.
-
-```markdown
-# Reconhecimento de Atividades Humanas com K-means
-
-## Objetivo
-Este projeto implementa um sistema de reconhecimento de atividades humanas utilizando dados de sensores de smartphones através do algoritmo K-means. O sistema analisa dados de acelerômetro e giroscópio para identificar e agrupar seis diferentes atividades físicas: caminhada, subida de escadas, descida de escadas, sentar, ficar em pé e deitar.
-
-## Pré-requisitos
-- Python 3.8+
-- pandas
-- numpy
-- matplotlib
-- seaborn
-- scikit-learn
-
-## Instalação
-1. Clone este repositório
-```bash
-git clone https://github.com/seu-usuario/reconhecimento-atividades-kmeans.git
-cd reconhecimento-atividades-kmeans
-```
-
-2. Instale as dependências
-```bash
-pip install pandas numpy matplotlib seaborn scikit-learn
-```
-
-3. Download do Dataset
-- Faça o download do [UCI HAR Dataset](https://archive.ics.uci.edu/dataset/240/human+activity+recognition+using+smartphones)
-- Extraia o arquivo ZIP
-- Coloque a pasta "UCI HAR Dataset" no diretório raiz do projeto
-
-## Estrutura do Projeto
-```
-reconhecimento-atividades-kmeans/
-│
-├── main.py                    # Código principal
-├── README.md                  # Este arquivo
-└── UCI HAR Dataset/          # Dataset (deve ser baixado separadamente)
-    ├── train/
-    │   ├── X_train.txt
-    │   └── y_train.txt
-    └── features.txt
-```
-
-## Como Executar
-```bash
-python main.py
-```
 
 ## Principais Resultados
 - Redução efetiva da dimensionalidade dos dados através de PCA, mantendo aproximadamente 85% da variância com apenas 3 componentes
