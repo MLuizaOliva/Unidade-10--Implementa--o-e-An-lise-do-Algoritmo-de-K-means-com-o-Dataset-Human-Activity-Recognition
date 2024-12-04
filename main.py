@@ -71,26 +71,37 @@ def metodo_cotovelo(dados_normalizados, range_k=range(1, 11)):
     
     return inercias, silhouette_scores
 
-# Função principal de clustering
 def realizar_clustering(dados_pca, n_clusters):
     kmeans = KMeans(n_clusters=n_clusters, init='k-means++', random_state=42)
     clusters = kmeans.fit_predict(dados_pca)
+    
+    # Visualização 2D dos clusters
+    plt.figure(figsize=(10, 8))
+    scatter = plt.scatter(dados_pca[:, 0], 
+                          dados_pca[:, 1], 
+                          c=clusters, 
+                          cmap='viridis')
+    plt.colorbar(scatter)
+    plt.xlabel('Componente 1 (X)')
+    plt.ylabel('Componente 2 (Y)')
+    plt.title(f'Clusters K-means em 2D (K={n_clusters})')
+    plt.show()
     
     # Visualização 3D dos clusters
     fig = plt.figure(figsize=(10, 8))
     ax = fig.add_subplot(111, projection='3d')
     
     scatter = ax.scatter(dados_pca[:, 0], 
-                        dados_pca[:, 1], 
-                        dados_pca[:, 2],
-                        c=clusters,
-                        cmap='viridis')
+                         dados_pca[:, 1], 
+                         dados_pca[:, 2],
+                         c=clusters,
+                         cmap='viridis')
     
     plt.colorbar(scatter)
     ax.set_xlabel('Componente 1 (X)')
     ax.set_ylabel('Componente 2 (Y)')
     ax.set_zlabel('Componente 3 (Z)')
-    plt.title(f'Clusters K-means (K={n_clusters})')
+    plt.title(f'Clusters K-means 3D (K={n_clusters})')
     plt.show()
     
     return clusters, kmeans
