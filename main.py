@@ -91,7 +91,7 @@ def realizar_clustering(dados_pca, n_clusters, atividades):
     clusters = kmeans.fit_predict(dados_pca)
     
     # Visualização 2D
-    plt.figure(figsize=(15, 6))  # Aumentado altura para acomodar a legenda
+    plt.figure(figsize=(15, 6))
     
     # 2D Clusters
     plt.subplot(121)
@@ -111,15 +111,17 @@ def realizar_clustering(dados_pca, n_clusters, atividades):
                           c=atividades['atividade'], 
                           cmap='Set1')
     
-    # Criar legenda 2D
-    legend_elements = [plt.Line2D([0], [0], marker='o', color='w', 
-                                 markerfacecolor=plt.cm.Set1(i/6), 
-                                 label=atividades_map[i+1], 
+    # Criar legenda 2D com cores corretas
+    cmap = plt.cm.Set1
+    norm = plt.Normalize(1, 6)  # Normaliza valores entre 1 e 6
+    legend_elements = [plt.Line2D([0], [0], marker='o', color='w',
+                                 markerfacecolor=cmap(norm(i)), 
+                                 label=atividades_map[i],
                                  markersize=8)
-                      for i in range(6)]
+                      for i in range(1, 7)]
     
-    plt.legend(handles=legend_elements, 
-              loc='center', 
+    plt.legend(handles=legend_elements,
+              loc='center',
               bbox_to_anchor=(0.5, -0.2),
               ncol=6,
               prop={'size': 8})
@@ -131,7 +133,7 @@ def realizar_clustering(dados_pca, n_clusters, atividades):
     plt.show()
     
     # Visualizações 3D
-    fig = plt.figure(figsize=(15, 7))  # Aumentado altura para acomodar a legenda
+    fig = plt.figure(figsize=(15, 7))
     
     # 3D Clusters
     ax1 = fig.add_subplot(121, projection='3d')
@@ -154,14 +156,14 @@ def realizar_clustering(dados_pca, n_clusters, atividades):
                           c=atividades['atividade'],
                           cmap='Set1')
     
-    # Criar legenda 3D
-    legend_elements = [plt.Line2D([0], [0], marker='o', color='w', 
-                                 markerfacecolor=plt.cm.Set1(i/6), 
-                                 label=atividades_map[i+1], 
+    # Criar legenda 3D com cores corretas
+    legend_elements = [plt.Line2D([0], [0], marker='o', color='w',
+                                 markerfacecolor=cmap(norm(i)),
+                                 label=atividades_map[i],
                                  markersize=8)
-                      for i in range(6)]
+                      for i in range(1, 7)]
     
-    ax2.legend(handles=legend_elements, 
+    ax2.legend(handles=legend_elements,
               loc='center',
               bbox_to_anchor=(0.5, -0.2),
               ncol=6,
