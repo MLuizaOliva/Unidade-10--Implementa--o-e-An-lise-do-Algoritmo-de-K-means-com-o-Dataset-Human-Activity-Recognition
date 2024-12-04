@@ -77,11 +77,23 @@ def metodo_cotovelo(dados_normalizados, range_k=range(1, 11)):
     return inercias, silhouette_scores
 
 def realizar_clustering(dados_pca, n_clusters, atividades):
+    # Mapeamento das atividades
+    atividades_map = {
+        1: 'WALKING',
+        2: 'WALKING_UPSTAIRS',
+        3: 'WALKING_DOWNSTAIRS',
+        4: 'SITTING',
+        5: 'STANDING',
+        6: 'LAYING'
+    }
+
     kmeans = KMeans(n_clusters=n_clusters, init='k-means++', random_state=42)
     clusters = kmeans.fit_predict(dados_pca)
     
-    # Visualização 2D - Clusters
-    plt.figure(figsize=(15, 5))
+    # Visualização 2D
+    plt.figure(figsize=(15, 6))  # Aumentado altura para acomodar a legenda
+    
+    # 2D Clusters
     plt.subplot(121)
     scatter1 = plt.scatter(dados_pca[:, 0], 
                           dados_pca[:, 1], 
@@ -92,13 +104,26 @@ def realizar_clustering(dados_pca, n_clusters, atividades):
     plt.ylabel('Componente 2 (Y)')
     plt.title(f'Clusters K-means em 2D (K={n_clusters})')
     
-    # Visualização 2D - Atividades reais
+    # 2D Atividades
     plt.subplot(122)
     scatter2 = plt.scatter(dados_pca[:, 0], 
                           dados_pca[:, 1], 
                           c=atividades['atividade'], 
                           cmap='Set1')
-    plt.colorbar(scatter2)
+    
+    # Criar legenda 2D
+    legend_elements = [plt.Line2D([0], [0], marker='o', color='w', 
+                                 markerfacecolor=plt.cm.Set1(i/6), 
+                                 label=atividades_map[i+1], 
+                                 markersize=8)
+                      for i in range(6)]
+    
+    plt.legend(handles=legend_elements, 
+              loc='center', 
+              bbox_to_anchor=(0.5, -0.2),
+              ncol=6,
+              prop={'size': 8})
+    
     plt.xlabel('Componente 1 (X)')
     plt.ylabel('Componente 2 (Y)')
     plt.title('Atividades Reais em 2D')
@@ -106,7 +131,7 @@ def realizar_clustering(dados_pca, n_clusters, atividades):
     plt.show()
     
     # Visualizações 3D
-    fig = plt.figure(figsize=(15, 5))
+    fig = plt.figure(figsize=(15, 7))  # Aumentado altura para acomodar a legenda
     
     # 3D Clusters
     ax1 = fig.add_subplot(121, projection='3d')
@@ -128,11 +153,25 @@ def realizar_clustering(dados_pca, n_clusters, atividades):
                           dados_pca[:, 2],
                           c=atividades['atividade'],
                           cmap='Set1')
-    plt.colorbar(scatter4)
+    
+    # Criar legenda 3D
+    legend_elements = [plt.Line2D([0], [0], marker='o', color='w', 
+                                 markerfacecolor=plt.cm.Set1(i/6), 
+                                 label=atividades_map[i+1], 
+                                 markersize=8)
+                      for i in range(6)]
+    
+    ax2.legend(handles=legend_elements, 
+              loc='center',
+              bbox_to_anchor=(0.5, -0.2),
+              ncol=6,
+              prop={'size': 8})
+    
     ax2.set_xlabel('Componente 1 (X)')
     ax2.set_ylabel('Componente 2 (Y)')
     ax2.set_zlabel('Componente 3 (Z)')
     ax2.set_title('Atividades Reais 3D')
+    
     plt.tight_layout()
     plt.show()
     
